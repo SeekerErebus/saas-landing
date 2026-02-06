@@ -1,0 +1,164 @@
+---
+const plans = [
+  {
+    name: "Free",
+    description: "For individuals and small projects",
+    monthlyPrice: 0,
+    annualPrice: 0,
+    cta: "Get started",
+    highlighted: false,
+    features: [
+      "Up to 5 team members",
+      "3 active projects",
+      "Basic task management",
+      "Community support",
+      "1 GB storage",
+    ],
+  },
+  {
+    name: "Pro",
+    description: "For growing teams that need more power",
+    monthlyPrice: 24,
+    annualPrice: 19,
+    cta: "Start free trial",
+    highlighted: true,
+    features: [
+      "Unlimited team members",
+      "Unlimited projects",
+      "Advanced automations",
+      "Priority support",
+      "50 GB storage",
+      "Custom workflows",
+      "Analytics dashboard",
+    ],
+  },
+  {
+    name: "Enterprise",
+    description: "For organizations with advanced needs",
+    monthlyPrice: null,
+    annualPrice: null,
+    cta: "Contact sales",
+    highlighted: false,
+    features: [
+      "Everything in Pro",
+      "SSO & SAML",
+      "Advanced permissions",
+      "Dedicated account manager",
+      "Unlimited storage",
+      "Custom integrations",
+      "SLA guarantee",
+      "Audit logs",
+    ],
+  },
+];
+---
+
+<section id="pricing" class="relative py-24 md:py-32">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="text-sm font-semibold uppercase tracking-wider text-accent-400">Pricing</p>
+      <h2 class="mt-3 text-3xl font-bold text-white md:text-4xl">
+        Simple, transparent pricing
+      </h2>
+      <p class="mt-4 text-lg text-surface-400">
+        Start free. Upgrade when you're ready. No surprises.
+      </p>
+    </div>
+
+    <!-- Billing toggle -->
+    <div class="mt-10 flex items-center justify-center gap-3">
+      <span id="monthly-label" class="text-sm font-medium text-white">Monthly</span>
+      <button
+        id="billing-toggle"
+        class="relative h-7 w-12 rounded-full bg-surface-700 transition-colors"
+        aria-label="Toggle annual billing"
+      >
+        <span id="toggle-dot" class="absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform"></span>
+      </button>
+      <span id="annual-label" class="text-sm font-medium text-surface-400">
+        Annual <span class="text-accent-400">(-20%)</span>
+      </span>
+    </div>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-3">
+      {plans.map((plan) => (
+        <div class={`relative rounded-2xl border p-8 ${
+          plan.highlighted
+            ? "border-accent-500/40 bg-accent-600/5 shadow-lg shadow-accent-600/10"
+            : "border-white/5 bg-white/[0.02]"
+        }`}>
+          {plan.highlighted && (
+            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-accent-600 px-4 py-1 text-xs font-semibold text-white">
+              Most Popular
+            </div>
+          )}
+          <div>
+            <h3 class="text-lg font-semibold text-white">{plan.name}</h3>
+            <p class="mt-1 text-sm text-surface-400">{plan.description}</p>
+          </div>
+          <div class="mt-6">
+            {plan.monthlyPrice !== null ? (
+              <div class="flex items-baseline gap-1">
+                <span class="text-4xl font-bold text-white" data-monthly={plan.monthlyPrice} data-annual={plan.annualPrice}>
+                  ${plan.monthlyPrice}
+                </span>
+                <span class="text-surface-500">/month</span>
+              </div>
+            ) : (
+              <div class="flex items-baseline">
+                <span class="text-4xl font-bold text-white">Custom</span>
+              </div>
+            )}
+          </div>
+          <a
+            href="#"
+            class={`mt-8 block rounded-xl px-6 py-3 text-center text-sm font-semibold transition-all ${
+              plan.highlighted
+                ? "bg-accent-600 text-white shadow-lg shadow-accent-600/25 hover:bg-accent-500"
+                : "border border-white/10 bg-white/5 text-surface-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            {plan.cta}
+          </a>
+          <ul class="mt-8 space-y-3">
+            {plan.features.map((feature) => (
+              <li class="flex items-start gap-3 text-sm text-surface-300">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const toggle = document.getElementById("billing-toggle");
+  const dot = document.getElementById("toggle-dot");
+  const monthlyLabel = document.getElementById("monthly-label");
+  const annualLabel = document.getElementById("annual-label");
+  const prices = document.querySelectorAll("[data-monthly]");
+
+  let isAnnual = false;
+
+  toggle?.addEventListener("click", () => {
+    isAnnual = !isAnnual;
+    dot?.classList.toggle("translate-x-5", isAnnual);
+    toggle.classList.toggle("bg-accent-600", isAnnual);
+    toggle.classList.toggle("bg-surface-700", !isAnnual);
+    monthlyLabel?.classList.toggle("text-white", !isAnnual);
+    monthlyLabel?.classList.toggle("text-surface-400", isAnnual);
+    annualLabel?.classList.toggle("text-white", isAnnual);
+    annualLabel?.classList.toggle("text-surface-400", !isAnnual);
+
+    prices.forEach((el) => {
+      const monthly = el.getAttribute("data-monthly");
+      const annual = el.getAttribute("data-annual");
+      el.textContent = `$${isAnnual ? annual : monthly}`;
+    });
+  });
+</script>

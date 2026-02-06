@@ -1,0 +1,84 @@
+---
+const faqs = [
+  {
+    question: "How does the free plan work?",
+    answer: "The free plan is completely free forever — no credit card required. You get access to core features for up to 5 team members and 3 active projects. When you're ready to scale, upgrade to Pro.",
+  },
+  {
+    question: "Can I switch plans at any time?",
+    answer: "Absolutely. You can upgrade, downgrade, or cancel at any time. When upgrading, you'll be prorated for the remainder of your billing cycle. When downgrading, your new rate starts at the next billing period.",
+  },
+  {
+    question: "Is there a free trial for the Pro plan?",
+    answer: "Yes! Every Pro plan starts with a 14-day free trial with full access to all features. No credit card required to start. If you decide it's not for you, you'll automatically drop to the free plan.",
+  },
+  {
+    question: "What integrations do you support?",
+    answer: "FlowStack integrates with GitHub, GitLab, Slack, Discord, Figma, Notion, Linear, Jira, Google Workspace, and dozens more. We also have a REST API and webhooks for custom integrations.",
+  },
+  {
+    question: "How does FlowStack handle data security?",
+    answer: "Security is foundational, not an afterthought. All data is encrypted at rest and in transit. We're SOC 2 Type II compliant and offer SSO/SAML on Enterprise plans. We never sell your data.",
+  },
+  {
+    question: "Do you offer discounts for startups or nonprofits?",
+    answer: "Yes. We offer 50% off Pro plans for verified startups (under 2 years old, under $5M in funding) and nonprofits. Contact our sales team to apply.",
+  },
+];
+---
+
+<section id="faq" class="relative py-24 md:py-32">
+  <div class="mx-auto max-w-3xl px-6">
+    <div class="text-center">
+      <p class="text-sm font-semibold uppercase tracking-wider text-accent-400">FAQ</p>
+      <h2 class="mt-3 text-3xl font-bold text-white md:text-4xl">
+        Frequently asked questions
+      </h2>
+    </div>
+
+    <div class="mt-12 space-y-2">
+      {faqs.map((faq, i) => (
+        <div class="faq-item rounded-xl border border-white/5 bg-white/[0.02]">
+          <button
+            class="faq-trigger flex w-full items-center justify-between px-6 py-5 text-left"
+            aria-expanded="false"
+            data-faq-index={i}
+          >
+            <span class="text-sm font-medium text-white pr-4">{faq.question}</span>
+            <svg class="faq-icon h-5 w-5 shrink-0 text-surface-500 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+            </svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-5">
+            <p class="text-sm text-surface-400 leading-relaxed">{faq.answer}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll(".faq-trigger").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const item = trigger.closest(".faq-item");
+      const content = item?.querySelector(".faq-content");
+      const icon = item?.querySelector(".faq-icon");
+      const isOpen = trigger.getAttribute("aria-expanded") === "true";
+
+      // Close all others
+      document.querySelectorAll(".faq-item").forEach((other) => {
+        if (other !== item) {
+          other.querySelector(".faq-content")?.classList.add("hidden");
+          other.querySelector(".faq-trigger")?.setAttribute("aria-expanded", "false");
+          other.querySelector(".faq-icon")?.classList.remove("rotate-45");
+        }
+      });
+
+      // Toggle current
+      content?.classList.toggle("hidden", isOpen);
+      trigger.setAttribute("aria-expanded", String(!isOpen));
+      icon?.classList.toggle("rotate-45", !isOpen);
+    });
+  });
+</script>
